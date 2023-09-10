@@ -40,6 +40,7 @@ fun TextFieldCommon(
             imeAction = ImeAction.Done
         ),
         //e aqui oque vai ocorrer ao clicar no botão done doo keybaord
+        //no caso e onDone porque o ImerAction e Done
         keyboardActions = KeyboardActions(onDone = {
             immerAction()
             keybaordController?.hide()
