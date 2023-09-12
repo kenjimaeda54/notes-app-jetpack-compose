@@ -5,6 +5,7 @@ Aplicativo de anotação bem simples, usuário consegue adicionar as suas anota�
 ## Feature
 ![arquitetura](./arquitetura.png)
 ##
+- Pode [usar isto para encontrar as bibliotecas que tem suporte](https://developer.android.com/jetpack/compose/libraries?hl=pt-br)
 - Para salvar os dados no banco Squilete local usamos o Room e arquitetura desenhada acima
 - Usamos injeção dependência,View Model,Flow e Coretines
 - Primeiro crio um arquivo que ira iniciar o Application  e defino no AndroidManifest.xml a tag application com o nome do projeto
