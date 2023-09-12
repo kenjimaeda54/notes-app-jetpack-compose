@@ -1,5 +1,6 @@
 package com.example.notesapp.screens.notes
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,30 +25,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.notesapp.R
-import com.example.notesapp.mock.notesData
 import com.example.notesapp.model.NotesModel
+import com.example.notesapp.viewModel.NotesViewModel
 import com.example.notesapp.views.ButtonCommon
+import com.example.notesapp.views.RowNote
 import com.example.notesapp.views.TextFieldCommon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen(
-    listNotes: List<NotesModel>,
-    addNotes: () -> Unit,
-    removeNotes: () -> Unit,
-) {
-    var notes by remember {
+fun NotesScreen(notesViewModel: NotesViewModel = viewModel()) {
+    val listNotes = notesViewModel.noteList.collectAsState().value
+    val context = LocalContext.current
+    //retorna o ultimo valor de noteList dentro do flow
+
+    var titleNotes by remember {
         mutableStateOf("")
     }
 
     var description by remember {
         mutableStateOf("")
     }
+
+
 
     Column(
         modifier = Modifier
@@ -68,10 +74,10 @@ fun NotesScreen(
             modifier = Modifier.padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextFieldCommon(value = notes, onValueChange = {
+            TextFieldCommon(value = titleNotes, onValueChange = {
                 if (it.all { char ->
                         char.isLetter() || char.isWhitespace()
-                    }) notes = it
+                    }) titleNotes = it
             }, label = {
                 Text(text = "Add your note")
             })
@@ -84,11 +90,22 @@ fun NotesScreen(
                 Text(text = "Add your description")
             })
             Spacer(modifier = Modifier.height(30.dp))
-            ButtonCommon(onCLick = { /*TODO*/ }, textButton = "Salvar")
+            ButtonCommon(onCLick = {
+                if (titleNotes.isNotEmpty() && description.isNotEmpty()) {
+                    val newNotes = NotesModel(title = titleNotes, description = description)
+                     notesViewModel.addNote(newNotes)
+                    Toast.makeText(context, "Add note", Toast.LENGTH_SHORT).show()
+                    titleNotes = ""
+                    description = ""
+                }
+
+            }, textButton = "Salvar")
         }
         LazyColumn {
             items(listNotes) {
-
+                RowNote(note = it) {
+                    notesViewModel.deleteNote(it)
+                }
             }
         }
     }
@@ -97,5 +114,5 @@ fun NotesScreen(
 @Composable
 @Preview(showBackground = true)
 fun NotesScreenPreview() {
-    NotesScreen(listNotes =  notesData, addNotes = {}, removeNotes = {})
+    NotesScreen()
 }
