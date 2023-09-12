@@ -59,8 +59,8 @@ class MainActivity : ComponentActivity() {
 
 
 ```kotlin
-//NotesModel
 
+//NotesModel
 @Entity(tableName = "notes")
 //se não colocar o nome da entity considerara nomne da classe
 data class NotesModel(
@@ -111,7 +111,7 @@ interface NotesDao {
 - Depois de tudo isso precisamos de um módulo para injeção dependência é ele que ira prover os acessos
 - Eu provenho o acesso ao Dão e o Database, não preciso instanciar essa classe em nenhum lugar, pois será gerada automaticamente quando fizer o rebuild do projeto
 
-```koltin
+```kotlin
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -136,10 +136,8 @@ object AppModule {
 
 }
 
-
-
-
 ```
+
 ## 
 - Agora está tudo pronto para iniciarmos as injeções dependências, primeiro começo na camada Repository, depois View Model
 - No View Model se não tivesse usando Coretines posso simplesmente criar funções normais e aplicar na View , agora por estar usando assíncrono preciso do viewModelScope.launch
