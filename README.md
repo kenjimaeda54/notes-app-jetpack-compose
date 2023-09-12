@@ -4,4 +4,4 @@ Aplicativo de notacao bem simples,usuario consegue adicionar as suas anotacoes e
 
 
 ## Feature
-![arquitetura]
+![arquitetura](https://github.com/kenjimaeda54/notes-app-jetpack-compose/blob/develop/arquitetura.png)
